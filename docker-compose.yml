@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+      - "10000-10100:10000-10100/udp"
+    environment:
+      - MEDIASOUP_ANNOUNCED_IP=127.0.0.1
+      - FRONTEND_URL=http://localhost:5173
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  coturn:
+    image: coturn/coturn
+    network_mode: host
+    ports:
+      - "3478:3478"
+      - "3478:3478/udp"
+      - "5349:5349"
+      - "5349:5349/udp"
+    environment:
+      - TURN_USERNAME=convora
+      - TURN_PASSWORD=convora123
